@@ -1,8 +1,17 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schedule;
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote');
+/*
+| Run by `php artisan schedule:run` every minute (Windows Scheduled Task, see
+| windows/install-autostart.ps1). Order matters: the cheap auto-restore runs
+| before a potentially long sync.
+*/
+
+Schedule::command('display:auto-restore')
+    ->everyMinute()
+    ->withoutOverlapping();
+
+Schedule::command('posters:sync')
+    ->cron((string) config('posters.sync.schedule', '15 */6 * * *'))
+    ->withoutOverlapping(120);

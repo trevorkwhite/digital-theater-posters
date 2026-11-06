@@ -1,0 +1,37 @@
+{
+  "Items": [
+    {
+      "Name": "Blade Runner",
+      "Id": "1002",
+      "SortName": "Blade Runner",
+      "OfficialRating": "R",
+      "Genres": ["Science Fiction", "Drama", "Thriller"],
+      "CommunityRating": 7.9,
+      "RunTimeTicks": 70200000000,
+      "ProductionYear": 1982,
+      "ProviderIds": {"Tmdb": "78", "Imdb": "tt0083658"},
+      "IsFolder": false,
+      "ParentId": "77",
+      "Type": "Movie",
+      "ImageTags": {"Primary": "0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e"},
+      "MediaType": "Video"
+    },
+    {
+      "Name": "Dune: Part Two",
+      "Id": "3001",
+      "SortName": "Dune: Part Two",
+      "OfficialRating": "PG-13",
+      "Genres": ["Science Fiction", "Adventure"],
+      "CommunityRating": 8.2,
+      "RunTimeTicks": 99630000000,
+      "ProductionYear": 2024,
+      "ProviderIds": {"Tmdb": "693134", "Imdb": "tt15239678"},
+      "IsFolder": false,
+      "ParentId": "77",
+      "Type": "Movie",
+      "ImageTags": {"Primary": "d00e0f1a2b3c4d5e6f708192a3b4c5d6"},
+      "MediaType": "Video"
+    }
+  ],
+  "TotalRecordCount": 2
+}

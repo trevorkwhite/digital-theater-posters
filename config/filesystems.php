@@ -47,6 +47,15 @@ return [
             'report' => false,
         ],
 
+        // Cached poster artwork. Not public: images are served by PosterController.
+        'posters' => [
+            'driver' => 'local',
+            'root' => storage_path('app/posters'),
+            'serve' => false,
+            'throw' => false,
+            'report' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

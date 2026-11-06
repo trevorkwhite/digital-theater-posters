@@ -1,0 +1,23 @@
+{
+  "Items": [
+    {
+      "Name": "The Thing",
+      "ServerId": "f4c2a1d9b8e74c3fa1b2c3d4e5f60718",
+      "Id": "1003",
+      "SortName": "Thing",
+      "OfficialRating": "R",
+      "Genres": ["Horror", "Mystery", "Science Fiction"],
+      "CommunityRating": 8.1,
+      "RunTimeTicks": 65430000000,
+      "ProductionYear": 1982,
+      "ProviderIds": {"Tmdb": "1091", "Imdb": "tt0084787"},
+      "IsFolder": false,
+      "ParentId": "41",
+      "Type": "Movie",
+      "ImageTags": {"Primary": "9f8e7d6c5b4a39281706f5e4d3c2b1a0"},
+      "BackdropImageTags": [],
+      "MediaType": "Video"
+    }
+  ],
+  "TotalRecordCount": 3
+}
