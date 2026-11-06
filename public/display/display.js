@@ -53,6 +53,7 @@
     var blackPrepTimer = null;
 
     var reloadPending = false;
+    var reloadRetryAt = 0;
 
     /* ------------------------------------------------------------------ utils */
 
@@ -288,7 +289,7 @@
         if (advancing) { return Promise.resolve(); }
         if (paused && reschedule) { return Promise.resolve(); }
 
-        if (reloadPending && state.mode === 'normal' && reschedule) {
+        if (reloadPending && state.mode === 'normal' && reschedule && Date.now() >= reloadRetryAt) {
             return safeReload('scheduled');
         }
 
@@ -383,9 +384,15 @@
             if (stateKey === null && pollFailures >= 3) {
                 applyState({ mode: 'normal', brightness: 100, fade_ms: 1000, version: 'offline' });
             }
-        }).then(function () {
-            setTimeout(pollState, pollFailures ? Math.min(POLL_BACKOFF_MAX_MS, POLL_MS * Math.pow(2, pollFailures)) : POLL_MS);
+        }).then(scheduleNextPoll, function (err) {
+            // applyState threw: log it but never let the poll loop die.
+            log('state apply failed:', err && err.message);
+            scheduleNextPoll();
         });
+    }
+
+    function scheduleNextPoll() {
+        setTimeout(pollState, pollFailures ? Math.min(POLL_BACKOFF_MAX_MS, POLL_MS * Math.pow(2, pollFailures)) : POLL_MS);
     }
 
     /* ------------------------------------------------------------ self-healing */
@@ -403,7 +410,9 @@
             window.location.reload();
         }).catch(function () {
             reloading = false;
-            schedule(ROTATE_MS); // try again later, keep showing posters
+            // Server is down: keep rotating from history and retry the reload in 5 minutes.
+            reloadRetryAt = Date.now() + 5 * 60 * 1000;
+            schedule(ROTATE_MS);
         });
     }
 
@@ -453,6 +462,8 @@
         if (!navigator.wakeLock || document.visibilityState !== 'visible') { return; }
         navigator.wakeLock.request('screen').then(function (lock) {
             wakeLock = lock;
+            // The browser drops the lock when the page is hidden; allow re-requesting it.
+            lock.addEventListener('release', function () { wakeLock = null; });
         }, function () { /* not allowed here; Windows power settings handle it */ });
     }
     document.addEventListener('visibilitychange', function () {

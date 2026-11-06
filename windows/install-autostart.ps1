@@ -135,10 +135,14 @@ if (-not $SkipScheduler) {
     Write-Host "PHP:  $PhpPath"
 
     Push-Location $AppPath
+    # PS 5.1 turns any stderr line from a native exe into a terminating error under 'Stop'.
+    $prevEap = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
     try {
         $version = & $PhpPath artisan --version 2>&1
         Write-Host "      $version"
     } finally {
+        $ErrorActionPreference = $prevEap
         Pop-Location
     }
 

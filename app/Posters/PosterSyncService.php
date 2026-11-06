@@ -373,7 +373,12 @@ class PosterSyncService
     private function metadataChanged(object $old, array $meta): bool
     {
         foreach (self::METADATA_COLUMNS as $column) {
-            if ($this->normalise($column, $old->{$column} ?? null) !== $this->normalise($column, $meta[$column])) {
+            $before = $this->normalise($column, $old->{$column} ?? null);
+            $after = $this->normalise($column, $meta[$column]);
+
+            // MySQL JSON columns return object keys re-ordered, so compare decoded
+            // arrays by key/value pairs (==) rather than identity (===).
+            if (is_array($before) && is_array($after) ? $before != $after : $before !== $after) {
                 return true;
             }
         }

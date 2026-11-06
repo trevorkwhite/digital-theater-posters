@@ -8,4 +8,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', DisplayController::class)->name('display');
 
 // Cached poster image from local disk (PosterController is owned by the cache layer).
-Route::get('/posters/{poster}/image', [PosterController::class, 'image'])->name('posters.image');
+// No session/cookie middleware, so Edge can cache images cleanly for offline fallback.
+Route::get('/posters/{poster}/image', [PosterController::class, 'image'])
+    ->name('posters.image')
+    ->withoutMiddleware([
+        \Illuminate\Session\Middleware\StartSession::class,
+        \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+        \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
+        \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+        \Illuminate\Cookie\Middleware\EncryptCookies::class,
+    ]);

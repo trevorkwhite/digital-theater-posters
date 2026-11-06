@@ -110,7 +110,7 @@ class DemoPosterSeeder extends Seeder
         ob_start();
         imagepng($img);
         $bytes = (string) ob_get_clean();
-        imagedestroy($img);
+        unset($img);
 
         return $bytes;
     }
@@ -135,6 +135,6 @@ class DemoPosterSeeder extends Seeder
 
         imagealphablending($img, true);
         imagecopyresized($img, $tmp, (int) (($width - $tw * $scale) / 2), $y, 0, 0, $tw * $scale, $th * $scale, $tw, $th);
-        imagedestroy($tmp);
+        unset($tmp);
     }
 }
